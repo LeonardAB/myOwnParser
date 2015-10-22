@@ -1,0 +1,1 @@
+This package uses the EDICT (http://www.edrdg.org/jmdict/edict.html) dictionary files. These files are the property of the Electronic Dictionary Research and Development Group (http://www.edrdg.org/), and are used in conformance with the Group's licence (http://www.edrdg.org/edrdg/licence.html).
