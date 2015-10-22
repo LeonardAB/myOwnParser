@@ -56,7 +56,7 @@ public class EdictReader {
                         //http://stackoverflow.com/questions/3826918/how-to-classify-japanese-characters-as-either-kanji-or-kana    
                         //character list: http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml
                         //charmatcher belum diganti rentangnya
-                        final CharMatcher containsJapanese = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //all including japanese punctuation
+                        final CharMatcher containsJapanese = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //all including japanese punctuation, untuk exclude romaji bisa manfaatkan .or()
                         final CharMatcher containsKanji    = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //only kanji
                         final CharMatcher containsKana     = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //hiragana or katakana
                         final CharMatcher containsHiragana = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //only hiragana
