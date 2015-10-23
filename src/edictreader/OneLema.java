@@ -136,6 +136,7 @@ private String findNoteType (String note) {
     //See (in the beginning - pos 1) && japanese ortho
     //esp. (in the beginning pos 1) && japanese ortho
     //only (in the end - pos length - 4(5?)) && japanese ortho
+    //as (in the beginning - pos 1) && japanese ortho
     //other than that but contain japanese ortho
     
     
