@@ -37,6 +37,8 @@ public class EdictReader {
             System.out.println("this is the test ground");
             
             
+          //TODO hitung dan pilih kode bahasa mana saja yang muncul di file yg penuh. list code : https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+                       
             
             
             
@@ -53,17 +55,11 @@ public class EdictReader {
                     case "2":
                         str = in.readLine();
                         System.out.println(str);
-                        //http://stackoverflow.com/questions/3826918/how-to-classify-japanese-characters-as-either-kanji-or-kana    
-                        //character list: http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml
-                        //charmatcher belum diganti rentangnya
-                        final CharMatcher containsJapanese = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //all including japanese punctuation, untuk exclude romaji bisa manfaatkan .or()
-                        final CharMatcher containsKanji    = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //only kanji
-                        final CharMatcher containsKana     = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //hiragana or katakana
-                        final CharMatcher containsHiragana = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //only hiragana
-                        final CharMatcher containsKatakana = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);  //only katakana
+                        
+                        
                        
-                        boolean contentTest = containsJapanese.matchesAnyOf(str);
-                        System.out.println("containsJapanese = " + contentTest);
+                        
+                        
                         break;
                     case "3":
                         while ((str = in.readLine()) != null) {
