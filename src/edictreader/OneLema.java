@@ -5,7 +5,13 @@
  */
 package edictreader;
 
-import com.google.common.base.CharMatcher;
+import com.google.common.base.CharMatcher; //http://www.tutorialspoint.com/guava/guava_overview.htm  //https://github.com/google/guava/wiki/Release19
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +21,18 @@ import java.util.List;
  */
 public class OneLema {
 
+        //http://stackoverflow.com/questions/3826918/how-to-classify-japanese-characters-as-either-kanji-or-kana    
+        //character list: http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml
+        public static final CharMatcher CONTAINS_NORM_KANJI = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);
+        public static final CharMatcher CONTAINS_RARE_KANJI = CharMatcher.inRange((char) 0x3400, (char) 0x4dbf);
+        public static final CharMatcher CONTAINS_KANJI = CONTAINS_NORM_KANJI.or(CONTAINS_RARE_KANJI);
+        public static final CharMatcher CONTAINS_HIRAGANA = CharMatcher.inRange((char) 0x3040, (char) 0x309f);
+        public static final CharMatcher CONTAINS_KATAKANA = CharMatcher.inRange((char) 0x30a0, (char) 0x30ff)
+                .or(CharMatcher.inRange((char) 0xff66, (char) 0xff9d));
+        public static final CharMatcher CONTAINS_KANA = CONTAINS_KATAKANA.or(CONTAINS_HIRAGANA);
+        public static final CharMatcher CONTAINS_JAP_PUNCT = CharMatcher.inRange((char) 0x3001, (char) 0x303f);
+        public static final CharMatcher CONTAINS_JAPANESE = CONTAINS_KANJI.or(CONTAINS_KANA).or(CONTAINS_JAP_PUNCT);
+    
     String fullOri;
     String kanjiEnt, lemaEnt, entCode;
     boolean commonEnt;
@@ -73,6 +91,7 @@ public class OneLema {
             String unstripped = new String(fullOri.substring(this.lemasFullStartPos[i - 1] + 1, this.lemasFullEndPos[i - 1]));
             this.subGloss[i - 1] = new SubGloss(unstripped.replace("(" + iText + ")", "")); //http://stackoverflow.com/questions/10456681/how-to-initialize-array-in-java-when-the-class-constructor-has-parameters
             System.out.println("Stripped ke  " + i + "= " + this.subGloss[i - 1].fullGloss);
+            System.out.println("\n");
         }
 
     }
@@ -88,6 +107,22 @@ public class OneLema {
         public SubGloss(String fullGloss) {
             this.fullGloss = fullGloss;
             String[] notes = findNotes(fullGloss);
+            
+            for (String note: notes) {
+                
+                String noteType = OneLema.findNoteType(note);
+                if (noteType.equals("field")) {
+                    this.field=note.substring(1, note.length()-1);
+                    System.out.println("field = " + this.field);
+                }
+                 if (noteType.equals("dialect")) {
+                    this.dialect=note;
+                }
+                  if (noteType.equals("meaning note")) {
+                    this.othNotes=note;
+                }
+            }
+            
         }
 
     }
@@ -120,16 +155,16 @@ public class OneLema {
         }
         for (int i = 0; i < notesArr.length; i++) {  //this part is only for printing
             String notesArrX = notesArr[i];
-            System.out.println("notesArrX = " + notesArrX);
+            System.out.println("notesArrX = " + notesArrX + " -------- "+ OneLema.findNoteType(notesArrX));
         }
         return notesArr;
 
     }
 
-    private String findNoteType(String note) {
+    private static String findNoteType(String note) {
         String noteType;
         
-        if (note.substring(0).equals("{")) { //http://stackoverflow.com/questions/513832/how-do-i-compare-strings-in-java
+        if (note.substring(0,1).equals("{")) { //http://stackoverflow.com/questions/513832/how-do-i-compare-strings-in-java
             //curly brackets (field)
             noteType = "field";
         } else if (note.indexOf("See") == 1 && OneLema.checkJap("japanese", note)) { 
@@ -141,14 +176,17 @@ public class OneLema {
             //as (in the beginning - pos 1) && japanese ortho
             //other than that but contain japanese ortho
             noteType = "jap note";
-        
-        //TODO
-        //POS
+        //Part of Speech
         //mark
         //dialect / lang
-        // } else if (???)) {
-            
-            
+        } else if (OneLema.noteContentCheckByFile(note,"POS")) {
+            noteType = "POS";
+        } else if (OneLema.noteContentCheckByFile(note,"mark")) {
+            noteType = "mark";
+        } else if (OneLema.noteContentCheckByFile(note,"dialect")) {
+            noteType = "dialect";
+        } else if (note.matches("^[a-z]{3}:.*") ) {
+            noteType = "gairai";
         } else {
             noteType = "meaning note";
         }
@@ -161,44 +199,33 @@ public class OneLema {
     }
 
     public static boolean checkJap(String matcher, String target) {
-        //http://stackoverflow.com/questions/3826918/how-to-classify-japanese-characters-as-either-kanji-or-kana    
-        //character list: http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml
-        final CharMatcher containsNormKanji = CharMatcher.inRange((char) 0x4e00, (char) 0x9faf);
-        final CharMatcher containsRareKanji = CharMatcher.inRange((char) 0x3400, (char) 0x4dbf);
-        final CharMatcher containsKanji = containsNormKanji.or(containsRareKanji);
-        final CharMatcher containsHiragana = CharMatcher.inRange((char) 0x3040, (char) 0x309f);
-        final CharMatcher containsKatakana = CharMatcher.inRange((char) 0x30a0, (char) 0x30ff)
-                .or(CharMatcher.inRange((char) 0xff66, (char) 0xff9d));
-        final CharMatcher containsKana = containsKatakana.or(containsHiragana);
-        final CharMatcher containsJapPunct = CharMatcher.inRange((char) 0x3001, (char) 0x303f);
-        final CharMatcher containsJapanese = containsKanji.or(containsKana).or(containsJapPunct);
-
+        
         CharMatcher chosenMatcher = null;
 
         switch (matcher) {
             case "normkanji":
-                chosenMatcher = containsNormKanji;
+                chosenMatcher = CONTAINS_NORM_KANJI;
                 break;
             case "rarekanji":
-                chosenMatcher = containsRareKanji;
+                chosenMatcher = CONTAINS_RARE_KANJI;
                 break;
             case "kanji":
-                chosenMatcher = containsKanji;
+                chosenMatcher = CONTAINS_KANJI;
                 break;
             case "hiragana":
-                chosenMatcher = containsHiragana;
+                chosenMatcher = CONTAINS_HIRAGANA;
                 break;
             case "katakana":
-                chosenMatcher = containsKatakana;
+                chosenMatcher = CONTAINS_KATAKANA;
                 break;
             case "kana":
-                chosenMatcher = containsKana;
+                chosenMatcher = CONTAINS_KANA;
                 break;
             case "punct":
-                chosenMatcher = containsJapPunct;
+                chosenMatcher = CONTAINS_JAP_PUNCT;
                 break;
             case "japanese":
-                chosenMatcher = containsJapanese;
+                chosenMatcher = CONTAINS_JAPANESE;
                 break;
             default:
                 throw new AssertionError("matcher not recognized");
@@ -207,5 +234,56 @@ public class OneLema {
 
         boolean contentTest = chosenMatcher.matchesAnyOf(target);
         return contentTest;
+    }
+    
+    private static boolean noteContentCheckByFile (String note, String comparer) {
+        File comparerFile=null;
+        boolean strict,colon;
+        boolean doesContain = false;
+        
+        switch (comparer) {
+            case "POS":
+                comparerFile= new File("pos_list.txt");
+                strict = true;
+                colon = false;
+                break;
+            case "mark":
+                comparerFile= new File("mark_list.txt");
+                strict = true;
+                colon = false;
+                break;
+            case "dialect":
+                comparerFile= new File("ben_list.txt");
+                strict = false;
+                colon = true;
+                break;
+            default:
+                throw new AssertionError("wrong comparer");
+        }
+        try {
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(comparerFile), "EUC-JP"));
+        String item;
+        while ((item = in.readLine()) != null) {
+            if(!colon){               
+            doesContain = note.equals(item) ||
+                         (note.contains(item+",") && note.indexOf(item+",")==0) ||
+                         (note.contains(","+item) && note.lastIndexOf(","+item)==note.length()-item.length()-1) ||
+                         note.contains(","+item+",")  ;
+            } else {
+                doesContain = note.contains(item+":");
+            }
+            if (doesContain) {System.out.println("item = " + item);  break;}
+                    }
+                
+        in.close();
+        }
+        catch (UnsupportedEncodingException e) {
+                System.out.println(e.getMessage());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        return doesContain;
     }
 }

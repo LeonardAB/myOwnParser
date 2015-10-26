@@ -8,10 +8,7 @@
 package edictreader;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.zip.GZIPInputStream;
-import com.google.common.base.CharMatcher; //http://www.tutorialspoint.com/guava/guava_overview.htm  //https://github.com/google/guava/wiki/Release19
 
 /**
  * @author Dipta Mahardhika
@@ -35,8 +32,7 @@ public class EdictReader {
 
         if (taskNum.equals("1")) {
             System.out.println("this is the test ground");
-            
-            
+          
           //TODO hitung dan pilih kode bahasa mana saja yang muncul di file yg penuh. list code : https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
                        
             
@@ -56,7 +52,7 @@ public class EdictReader {
                         str = in.readLine();
                         System.out.println(str);
                         
-                        
+                        OneLema satuLema = new OneLema(str);
                        
                         
                         
@@ -67,7 +63,7 @@ public class EdictReader {
 
                             // TODO
                             // 1. cek apakah tidak ada lema yang memiliki lebih dari 20 arti
-                            OneLema satuLema = new OneLema(str);
+                           // OneLema satuLema = new OneLema(str);
 
                         }
                         break;
