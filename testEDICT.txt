@@ -1,4 +1,4 @@
-開く [ひらく] /(v5k,vi,vt) (1) to open/to undo/to unseal/to unpack/(2) to bloom (fre:, dut: sabel) /to unfold/to spread out/(3) to open (for business, e.g. in the morning)/(4) to be wide (gap, etc.)/to widen/(v5k,vt) (5) to hold (meeting, etc.)/to give/to open/(6) to found (nation, dynasty, sect, etc.,X)/to open (a new business)/to set up/to establish/to start/(7) to open (ports, borders, etc.)/(8) to open (an account)/(9) (See 拓く) to open up (new land, path, etc.)/to clear/to develop/(10) {comp} to open (a file, etc.)/(11) {math} to extract (root)/to reduce (equation)/(12) {food} (as 魚を開く) to cut open (fish)/(13) to change (kanji into hiragana)/(v5k,vi) (14) to flare (e.g. skirt)/(15) {sports} (as 体が開く, 肩が開く, etc.) to slacken (into a poor posture)/(P)/EntL1202440X/
+開く [ひらく] /(v5k,vi,vt) (1) to open/to undo/to unseal/to unpack/(2) to bloom (fre:, dut: sabel) /to unfold/to spread out/(3) to open (for business, e.g. in the morning)/(4) to be wide (gap, etc.)/to widen/(v5k,vt) (5) to hold (meeting, etc.)/to give/to open/(6) (adj-na,adj-no,n) to found (nation, dynasty, sect, etc.,X)/to open (a new business)/to set up/to establish/to start/(7) to open (ports, borders, etc.)/(8) to open (an account)/(9) (See 拓く) to open up (new land, path, etc.)/to clear/to develop/(10) {comp} to open (a file, etc.)/(11) {math} to extract (root)/to reduce (equation)/(12) {food} (as 魚を開く) to cut open (fish)/(13) (col) (uk) to change (kanji into hiragana)/(v5k,vi) (14) to flare (e.g. skirt)/(15) {sports} (as 体が開く, 肩が開く, etc.) to slacken (into a poor posture)/(P)/EntL1202440X/
 開き鯵 [ひらきあじ] /(n) split and dried saurel/EntL1904910X/
 開き戸 [ひらきど] /(n) (hinged) door/EntL1632940X/
 開き口 [ひらきぐち] /(n) {comp} aperture/EntL2345480X/
@@ -31,3 +31,11 @@
 ズジキツネベラ /(n) fourline hogfish (Bodianus trilineatus)/threeline hogfish/EntL2548440/
 セイバー(P);セーバー;サーベル;サーブル /(n) (サーブル is usu. in fencing; サーベル in cavalry) sabre (fre:, dut: sabel)/saber/(P)/EntL1055190X/
 儲かりまっか [もうかりまっか] /(exp) (uk) (osb:) (stereotypical Osakan greeting) Are you making money?/EntL2222850/
+べと病;露菌病 [べとびょう;ろきんびょう(露菌病)] /(n) downy mildew (disease)/EntL2454610/
+ほら貝;法螺貝;吹螺;梭尾 [ほらがい;ホラガイ] /(n) (uk) conch (Charonia tritonis)/trumpet shell/EntL1603560X/
+まとわり付く;纏わり付く;纏わりつく;まつわり付く [まとわりつく(まとわり付く,纏わり付く,纏わりつく);まつわりつく(纏わり付く,纏わりつく,まつわり付く)] /(v5k,vi) (uk) to coil about/to follow about/EntL1664140X/
+餢飳;伏兎 [ぶと] /(n) (obsc) {food} deep-fried mochi (Heian period)/EntL2709040/
+鼯鼠;鼺鼠 [むささび;むざさび(ok);ムササビ] /(n) (uk) Japanese giant flying squirrel (Petaurista leucogenys)/EntL1012360X/
+躓鼠;野衾 [ももんが;ももんがあ(鼯鼠);モモンガ] /(n) (uk) Japanese flying squirrel (Pteromys momonga)/small Japanese flying squirrel/Japanese dwarf flying squirrel/EntL1012680X/
+あのね(P);あのねえ;あんね;あのさあ /(int) (fam) (fem) look here/I say/well/I know what/I'll tell you what/just a minute/hold on/(P)/EntL1612640X/
+ありえんてぃー;アリエンティー /(exp) (joc) (sl) (See ありえない) that's impossible/I can't believe it/EntL2706100/

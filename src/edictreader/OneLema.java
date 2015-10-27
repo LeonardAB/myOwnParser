@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class OneLema {
     String fullOri;
     String kanjiEnt, lemaEnt, entCode;
     boolean commonEnt;
-    int kanjiLimPos, lemaEndPos, noOfLemas;
+    int kanjiLimPos, lemaEndPos, noOfGloss;
     int[] lemasPos = new int[20];
     int[] lemasFullStartPos = new int[20];
     int[] lemasFullEndPos = new int[20];
@@ -64,7 +65,7 @@ public class OneLema {
                 String iText = Integer.toString(i);
 
                 if (!(fullOri.contains("(" + iText + ")"))) {   //cek apakah sudah gloss terakhir apa belom
-                    this.noOfLemas = i - 1;
+                    this.noOfGloss = i - 1;
                     break;  // kalau udah terakhir keluar
                 }
                 this.lemasPos[i - 1] = fullOri.indexOf("(" + iText + ")");  //mencari posisi angka pembuka gloss (1),(2), etc
@@ -74,14 +75,14 @@ public class OneLema {
             }
 
         } else {
-            this.noOfLemas = 1;
+            this.noOfGloss = 1;
 
         }
-//         System.out.println("this.noOfLemas = " + this.noOfLemas);
-        for (int i = 1; i < this.noOfLemas + 1; i++) {
+//         System.out.println("this.noOfGloss = " + this.noOfGloss);
+        for (int i = 1; i < this.noOfGloss + 1; i++) {
             String iText = Integer.toString(i);
             //      System.out.println("lemasFullStartPos[i-1] = " + lemasFullStartPos[i-1]);
-            if (i != this.noOfLemas) {
+            if (i != this.noOfGloss) {
                 this.lemasFullEndPos[i - 1] = this.lemasFullStartPos[i];
             } else {
                 this.lemasFullEndPos[i - 1] = this.lemaEndPos;
@@ -99,11 +100,11 @@ public class OneLema {
     private class SubGloss {
 
         String fullGloss;
-        String[] ptOfSpch = new String[7];
-        String[] mark = new String[7];
-        String field, dialect, othNotes;
-        String[] gaiRai = new String[5];
-
+        String ptOfSpch; //multivalue
+        String mark = "" ; //multivalue, initiated because it has concat operation
+        String gaiRai; //multivalue
+        String field, dialect, jump, japNote; //single value
+        
         public SubGloss(String fullGloss) {
             this.fullGloss = fullGloss;
             String[] notes = findNotes(fullGloss);
@@ -112,19 +113,42 @@ public class OneLema {
                 
                 String noteType = OneLema.findNoteType(note);
                 if (noteType.equals("field")) {
-                    this.field=note.substring(1, note.length()-1);
-                    System.out.println("field = " + this.field);
+                    this.field = note.substring(1, note.length() - 1);
                 }
-                 if (noteType.equals("dialect")) {
-                    this.dialect=note;
+                if (noteType.equals("jump")) {
+                    this.jump = note;
                 }
-                  if (noteType.equals("meaning note")) {
-                    this.othNotes=note;
+                if (noteType.equals("jap note")) {
+                    this.japNote = note;
                 }
+                if (noteType.equals("dialect")) {
+                    this.dialect = note;
+                }
+                if (noteType.equals("POS")) {
+                    this.ptOfSpch = note;
+                }
+                if (noteType.equals("mark")) {
+                    this.mark += note;
+                    this.mark += ",";
+                }
+                if (noteType.equals("gairai")) {
+                    this.gaiRai = note;
+                }
+                
             }
             
+            if(mark != null && !mark.isEmpty()){mark = mark.substring(0,mark.length()-1);}
+            
+            if(jump != null && !jump.isEmpty()) System.out.println("jump = " + jump);
+            if(japNote != null && !japNote.isEmpty()) System.out.println("jap note = " + japNote);
+            if(field != null && !field.isEmpty()) System.out.println("field = " + field);
+            if(dialect != null && !dialect.isEmpty()) System.out.println("dialect = " + dialect);
+            if(ptOfSpch != null && !ptOfSpch.isEmpty()) System.out.println("POS = " + ptOfSpch);
+            if(mark != null && !mark.isEmpty()) System.out.println("mark = " + mark);
+            if(gaiRai != null && !gaiRai.isEmpty()) System.out.println("gairai = " + gaiRai);
+           
         }
-
+    
     }
 
     private String[] findNotes(String str) {
@@ -155,7 +179,7 @@ public class OneLema {
         }
         for (int i = 0; i < notesArr.length; i++) {  //this part is only for printing
             String notesArrX = notesArr[i];
-            System.out.println("notesArrX = " + notesArrX + " -------- "+ OneLema.findNoteType(notesArrX));
+//            System.out.println("notesArrX = " + notesArrX);
         }
         return notesArr;
 
@@ -272,7 +296,8 @@ public class OneLema {
             } else {
                 doesContain = note.contains(item+":");
             }
-            if (doesContain) {System.out.println("item = " + item);  break;}
+            if (doesContain) {//System.out.println("item = " + item);
+            break;}
                     }
                 
         in.close();
