@@ -42,6 +42,9 @@ public class OneLema {
     int[] lemasFullStartPos = new int[20];
     int[] lemasFullEndPos = new int[20];
     SubGloss[] subGloss = new SubGloss[20];
+    SubKanji[] subKanji = new SubKanji[7];
+    boolean hasKanji;
+    SubReading[] subReading = new SubReading[7];
 
     public OneLema(String fullOri) {
         this.fullOri = fullOri;
@@ -97,46 +100,68 @@ public class OneLema {
 
     }
 
+    private class SubKanji {
+
+        public SubKanji() {
+        }
+    }
+    
+    private class SubReading {
+
+        public SubReading() {
+        }
+    }
+
     private class SubGloss {
 
-        String fullGloss;
-        String ptOfSpch; //multivalue
-        String mark = "" ; //multivalue, initiated because it has concat operation
-        String gaiRai; //multivalue
-        String field, dialect, jump, japNote; //single value
+        String fullGloss = "";
+        String ptOfSpch= ""; //multivalue
+        String mark = "" ; //multivalue
+        String gaiRai= ""; //multivalue
+        String field= "", dialect= "", jump= "", japNote= ""; //single value
+        String pureMeaning= "";
         
         public SubGloss(String fullGloss) {
             this.fullGloss = fullGloss;
+            this.pureMeaning = fullGloss;
             String[] notes = findNotes(fullGloss);
             
             for (String note: notes) {
                 
                 String noteType = OneLema.findNoteType(note);
                 if (noteType.equals("field")) {
+                    pureMeaning = pureMeaning.replace(note, "");
                     this.field = note.substring(1, note.length() - 1);
                 }
                 if (noteType.equals("jump")) {
+                    pureMeaning = pureMeaning.replace("(" + note + ")", "");
                     this.jump = note;
                 }
                 if (noteType.equals("jap note")) {
+                    pureMeaning = pureMeaning.replace("(" + note + ")", "");
                     this.japNote = note;
                 }
                 if (noteType.equals("dialect")) {
+                    pureMeaning = pureMeaning.replace("(" + note + ")", "");
                     this.dialect = note;
                 }
                 if (noteType.equals("POS")) {
+                    pureMeaning = pureMeaning.replace("(" + note + ")", "");
                     this.ptOfSpch = note;
                 }
                 if (noteType.equals("mark")) {
+                    pureMeaning = pureMeaning.replace("(" + note + ")", "");
                     this.mark += note;
                     this.mark += ",";
                 }
                 if (noteType.equals("gairai")) {
+                    pureMeaning = pureMeaning.replace("(" + note + ")", "");
                     this.gaiRai = note;
                 }
                 
             }
             
+            pureMeaning = pureMeaning.trim().replaceAll(" +", " "); http://stackoverflow.com/questions/2932392/java-how-to-replace-2-or-more-spaces-with-single-space-in-string-and-delete-lead
             if(mark != null && !mark.isEmpty()){mark = mark.substring(0,mark.length()-1);}
             
             if(jump != null && !jump.isEmpty()) System.out.println("jump = " + jump);
@@ -146,6 +171,7 @@ public class OneLema {
             if(ptOfSpch != null && !ptOfSpch.isEmpty()) System.out.println("POS = " + ptOfSpch);
             if(mark != null && !mark.isEmpty()) System.out.println("mark = " + mark);
             if(gaiRai != null && !gaiRai.isEmpty()) System.out.println("gairai = " + gaiRai);
+            //System.out.println("pureMeaning = " + pureMeaning);
            
         }
     
@@ -218,7 +244,38 @@ public class OneLema {
         return noteType;
     }
 
-    public void fullOriPrint() {
+    public void entryPrint(int obj) {
+        switch (obj) {
+            case 1: 
+                System.out.println("fullOri = " + fullOri);
+                break;
+            case 2: 
+                System.out.println("kanjiEnt = " + kanjiEnt);
+                break;
+            case 3: 
+                System.out.println("lemaEnt = " + lemaEnt);
+                break;
+            case 4: 
+                System.out.println("entCode = " + entCode);
+                break;
+            case 5: 
+            {System.out.println("fullGloss :");
+                for (SubGloss gloss: subGloss) {
+                    System.out.println(gloss.fullGloss);
+                }
+            }
+                break;
+            case 6: 
+            {System.out.println("pureMeaning :");
+                for (SubGloss gloss: subGloss) {
+                    System.out.println(gloss.pureMeaning);
+                }
+            }
+                break;
+            default:
+                throw new AssertionError();
+        }
+        
         System.out.println(this.fullOri);
     }
 
