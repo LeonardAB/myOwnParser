@@ -36,6 +36,7 @@ public class OneLema {
     
     String fullOri;
     String kanjiEnt, lemaEnt, entCode;
+    String fullKanji, fullReading;
     boolean commonEnt;
     int kanjiLimPos, lemaEndPos, noOfGloss;
     int[] lemasPos = new int[20];
@@ -52,6 +53,12 @@ public class OneLema {
         //System.out.println("kanjiLimPos = " + kanjiLimPos);
         this.kanjiEnt = fullOri.substring(0, Math.min(fullOri.length(), this.kanjiLimPos)); //http://stackoverflow.com/questions/1583940/up-to-first-n-characters
 //        System.out.println("kanjiEnt = " + this.kanjiEnt);
+       
+        this.hasKanji = kanjiEnt.contains("[");
+        if (hasKanji) {
+            this.fullReading = kanjiEnt.substring(kanjiEnt.indexOf("[")+1, kanjiEnt.indexOf("]"));
+            System.out.println("fullReading = " + fullReading);
+        }
         if (fullOri.contains("(P)")) {
             this.lemaEndPos = fullOri.lastIndexOf("/(P)");
             this.commonEnt = true;
