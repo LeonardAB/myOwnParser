@@ -1,3 +1,5 @@
+叩き(P);敲き;三和土 [たたき(P);タタキ(P)] /(n) (1) (叩き, 敲き, タタキ only) mince (minced meat or fish)/(2) (叩き, 敲き only) (See 鰹) seared skipjack tuna/(3) (叩き, 敲き only) (sl) robbery/extortion/(4) (usu. 三和土 (gikun)) hard-packed dirt (clay, gravel, etc.) floor/concrete floor/(5) (叩き, タタキ only) whipping/lashing/bashing/beating/flaming/(P)/EntL1416050X/
+啄木鳥 [きつつき(gikun);たくぼくちょう;けら(gikun);けらつつき(gikun);キツツキ] /(n) (uk) woodpecker/EntL1415740X/
 開く [ひらく] /(v5k,vi,vt) (1) to open/to undo/to unseal/to unpack/(2) to bloom (fre:, dut: sabel) /to unfold/to spread out/(3) to open (for business, e.g. in the morning)/(4) to be wide (gap, etc.)/to widen/(v5k,vt) (5) to hold (meeting, etc.)/to give/to open/(6) (adj-na,adj-no,n) to found (nation, dynasty, sect, etc.,X)/to open (a new business)/to set up/to establish/to start/(7) to open (ports, borders, etc.)/(8) to open (an account)/(9) (See 拓く) to open up (new land, path, etc.)/to clear/to develop/(10) {comp} to open (a file, etc.)/(11) {math} to extract (root)/to reduce (equation)/(12) {food} (as 魚を開く) to cut open (fish)/(13) (col) (uk) to change (kanji into hiragana)/(v5k,vi) (14) to flare (e.g. skirt)/(15) {sports} (as 体が開く, 肩が開く, etc.) to slacken (into a poor posture)/(P)/EntL1202440X/
 開き鯵 [ひらきあじ] /(n) split and dried saurel/EntL1904910X/
 開き戸 [ひらきど] /(n) (hinged) door/EntL1632940X/
@@ -39,3 +41,6 @@
 躓鼠;野衾 [ももんが;ももんがあ(鼯鼠);モモンガ] /(n) (uk) Japanese flying squirrel (Pteromys momonga)/small Japanese flying squirrel/Japanese dwarf flying squirrel/EntL1012680X/
 あのね(P);あのねえ;あんね;あのさあ /(int) (fam) (fem) look here/I say/well/I know what/I'll tell you what/just a minute/hold on/(P)/EntL1612640X/
 ありえんてぃー;アリエンティー /(exp) (joc) (sl) (See ありえない) that's impossible/I can't believe it/EntL2706100/
+ガス灯;瓦斯灯(ateji);ガス燈(oK);瓦斯燈(ateji)(oK) [ガスとう] /(n) gas light/gas lamp/EntL1962920X/
+於て;於いて;於(io);置いて(iK) [おいて] /(conj) (uk) (See において) at/in/on/EntL1178920X/
+難しい(P);六借しい(ateji)(oK);六ヶ敷い(ateji)(oK) [むずかしい(P);むつかしい] /(adj-i) (1) difficult/hard/troublesome/complicated/serious (disease, problem, etc.)/(2) fussy/particular/fastidious/hard to please/displeased/(3) gloomy/glum/sullen/serious (look)/(4) (arch) dirty/unclean/filthy/detestable/(5) (arch) unpleasant/uncomfortable/creepy/spooky/(P)/EntL1460850X/

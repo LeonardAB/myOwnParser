@@ -45,8 +45,7 @@ public class OneLema {
     SubGloss[] subGloss = new SubGloss[20];
     SubKanji[] subKanji = new SubKanji[7];
     boolean hasKanji;
-    SubReading[] subReading = new SubReading[7];
-
+    
     public OneLema(String fullOri) {
         this.fullOri = fullOri;
         this.kanjiLimPos = fullOri.indexOf("/");  // http://stackoverflow.com/questions/2615749/java-method-to-get-position-of-a-match-in-a-string
@@ -58,6 +57,9 @@ public class OneLema {
         if (hasKanji) {
             this.fullReading = kanjiEnt.substring(kanjiEnt.indexOf("[")+1, kanjiEnt.indexOf("]"));
             System.out.println("fullReading = " + fullReading);
+            processKanji(fullKanji,fullReading);
+        } else {
+            processKanji(fullReading);
         }
         if (fullOri.contains("(P)")) {
             this.lemaEndPos = fullOri.lastIndexOf("/(P)");
@@ -102,23 +104,39 @@ public class OneLema {
             String unstripped = new String(fullOri.substring(this.lemasFullStartPos[i - 1] + 1, this.lemasFullEndPos[i - 1]));
             this.subGloss[i - 1] = new SubGloss(unstripped.replace("(" + iText + ")", "")); //http://stackoverflow.com/questions/10456681/how-to-initialize-array-in-java-when-the-class-constructor-has-parameters
             System.out.println("Stripped ke  " + i + "= " + this.subGloss[i - 1].fullGloss);
+            //TODO untuk entry woodpecker (gikun) entah kenapa strippednya ikut membawa kanjinya.
             System.out.println("\n");
         }
 
     }
 
-    private class SubKanji {
-
-        public SubKanji() {
-        }
+    private void processKanji(String fullReading) {
+       
     }
     
-    private class SubReading {
-
-        public SubReading() {
-        }
+    private void processKanji(String fullKanji, String fullReading) {
+       
     }
 
+    private class SubKanji {
+        String kanji, reading;
+        boolean kanjiCommon, readingCommon;
+                
+        public SubKanji(String kanji, String reading, boolean kanjiCommon, boolean readingCommon) {
+            this.kanji = kanji;
+            this.reading =reading;
+            this.kanjiCommon = kanjiCommon;
+            this.readingCommon =readingCommon;
+        }
+        
+        public SubKanji(String reading, boolean kanjiCommon) {
+            this.kanji = reading;
+            this.kanjiCommon = kanjiCommon;
+            this.reading = null;
+            this.readingCommon = false;
+        }
+    }
+  
     private class SubGloss {
 
         String fullGloss = "";
@@ -191,10 +209,20 @@ public class OneLema {
         List<String> notes = new ArrayList<>();  //http://stackoverflow.com/questions/858572/how-to-make-a-new-list-in-java
         for (int openBrk = -1; (openBrk = str.indexOf("(", openBrk + 1)) != -1;) {
             //whenever I got the value i, find the its close bracket
+            int prefOpenBrk =str.lastIndexOf("(",openBrk-1);
+            int prefCloseBrk =str.lastIndexOf(")",openBrk);
+            int nextOpenBrk = str.indexOf("(", openBrk);
             int closeBrk = str.indexOf(")", openBrk);
+            if (nextOpenBrk<closeBrk) {
+            closeBrk = str.indexOf (")", closeBrk);
+            }
+//            System.out.println("openBrk = " + openBrk);
+//            System.out.println("prefOpenBrk = " + prefOpenBrk);
+//            System.out.println("prefCloseBrk = " + prefCloseBrk);
             //System.out.println("openBrk = " + openBrk + "closeBrk = " + closeBrk);
-            if (openBrk != -1 && closeBrk != -1) {
+            if (openBrk != -1 && closeBrk != -1 && !(prefOpenBrk>prefCloseBrk)) {
                 notes.add(str.substring(openBrk + 1, closeBrk));
+                //TODO untuk yang double kurung, kurung terakhir masih hilang (cek gikun utk tataki)
             }
         }
 
@@ -240,6 +268,7 @@ public class OneLema {
             noteType = "POS";
         } else if (OneLema.noteContentCheckByFile(note,"mark")) {
             noteType = "mark";
+            //utk mark gikun, harusnya udah selalu keduluan sama jap note
         } else if (OneLema.noteContentCheckByFile(note,"dialect")) {
             noteType = "dialect";
         } else if (note.matches("^[a-z]{3}:.*") ) {
