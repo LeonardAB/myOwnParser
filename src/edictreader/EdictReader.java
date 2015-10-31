@@ -63,6 +63,7 @@ public class EdictReader {
 
                             // TODO
                             // 1. cek apakah tidak ada lema yang memiliki lebih dari 20 arti
+                            // 2. cek apakah tidak ada entry kanji (combined with the reading) lebih dari 7
                            // OneLema satuLema = new OneLema(str);
 
                         }
