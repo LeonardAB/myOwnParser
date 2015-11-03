@@ -14,8 +14,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.lang.Exception;
 
 /**
  *
@@ -44,7 +44,7 @@ public class OneLema {
     int[] lemasFullStartPos = new int[20];
     int[] lemasFullEndPos = new int[20];
     SubGloss[] subGloss = new SubGloss[20];
-    SubKanji[] subKanji = new SubKanji[7];
+    List<SubKanji> subKanji = new ArrayList<>();
     boolean hasKanji;
 
     public OneLema(String fullOri) {
@@ -114,16 +114,40 @@ public class OneLema {
 
     private void processKanji(String fullHiraOnly) { //isinya splitter utk entry yang multi kanji/reading
         List<String> hiraList = Arrays.asList(fullHiraOnly.split(";"));  //http://stackoverflow.com/questions/10631715/how-to-split-a-comma-separated-string
-        for (int i = 0; i < hiraList.size(); i++) {
-            this.subKanji[i] = new SubKanji(fullHiraOnly);
+        for (String hiraListX: hiraList) {
+            subKanji.add(new SubKanji(hiraListX));
         }
     }
 
     private void processKanji(String fullKanji, String fullReading) { //isinya splitter utk entry yang multi kanji/reading
         List<String> kanjiList = Arrays.asList(fullKanji.split(";"));  //http://stackoverflow.com/questions/10631715/how-to-split-a-comma-separated-string
         List<String> readingList = Arrays.asList(fullReading.split(";"));
-        for (int i = 0; i < kanjiList.size(); i++) {
-            //TODO assign reading to the precribed kanji, otherwise just combine everything
+        for (String readingListX: readingList) {
+            //TODO validate this method!
+            if (readingListX.contains("(")) {
+                String readingTemp = readingListX.substring(0, readingListX.indexOf("("));
+                List<String> subReadingAssign = Arrays.asList(readingListX.split(","));
+                for (String subReadingAssignX: subReadingAssign) {
+                    subKanji.add(new SubKanji(subReadingAssignX,readingTemp));
+                }
+            } else {
+                if (OneLema.checkJap("katakana", readingListX, true)) {
+                    subKanji.add(new SubKanji(readingListX)); 
+                } else {
+                    for (String kanjiListX: kanjiList) {
+                        subKanji.add(new SubKanji (kanjiListX, readingListX));
+                    }
+                }
+            }
+        }
+        List <String> tempReadKanji = new ArrayList<>();
+        for (SubKanji kanjiX : this.subKanji) {
+            tempReadKanji.add(kanjiX.kanji);
+        }
+        boolean kanjiAllReadingOK = tempReadKanji.containsAll(kanjiList);
+        if (!kanjiAllReadingOK) {
+            System.err.println("Kanji has no reading!");
+            System.exit(0);
         }
     }
 
@@ -276,10 +300,10 @@ public class OneLema {
         if (note.substring(0, 1).equals("{")) { //http://stackoverflow.com/questions/513832/how-do-i-compare-strings-in-java
             //curly brackets (field)
             noteType = "field";
-        } else if (note.indexOf("See") == 1 && OneLema.checkJap("japanese", note)) {
+        } else if (note.indexOf("See") == 1 && OneLema.checkJap("japanese", note,false)) {
             //See (in the beginning - pos 1) && japanese ortho
             noteType = "jump";
-        } else if (OneLema.checkJap("japanese", note)) {
+        } else if (OneLema.checkJap("japanese", note, false)) {
             //esp. (in the beginning pos 1) && japanese ortho
             //only (in the end - pos length - 4(5?)) && japanese ortho
             //as (in the beginning - pos 1) && japanese ortho
@@ -339,7 +363,7 @@ public class OneLema {
         System.out.println(this.fullOri);
     }
 
-    public static boolean checkJap(String matcher, String target) {
+    public static boolean checkJap(String matcher, String target, boolean strict) {
 
         CharMatcher chosenMatcher = null;
 
@@ -372,10 +396,14 @@ public class OneLema {
                 throw new AssertionError("matcher not recognized");
 
         }
-
-        boolean contentTest = chosenMatcher.matchesAnyOf(target);
-        return contentTest;
-    }
+        if (strict) {
+            boolean contentTest = chosenMatcher.matchesAllOf(target);
+            return contentTest;
+        } else {
+            boolean contentTest = chosenMatcher.matchesAnyOf(target);
+            return contentTest;
+        }
+     }
 
     private static boolean noteContentCheckByFile(String note, String comparer) {
         File comparerFile = null;
