@@ -45,3 +45,8 @@
 於て;於いて;於(io);置いて(iK) [おいて] /(conj) (uk) (See において) at/in/on/EntL1178920X/
 難しい(P);六借しい(ateji)(oK);六ヶ敷い(ateji)(oK) [むずかしい(P);むつかしい] /(adj-i) (1) difficult/hard/troublesome/complicated/serious (disease, problem, etc.)/(2) fussy/particular/fastidious/hard to please/displeased/(3) gloomy/glum/sullen/serious (look)/(4) (arch) dirty/unclean/filthy/detestable/(5) (arch) unpleasant/uncomfortable/creepy/spooky/(P)/EntL1460850X/
 いけ;いっけ /(pref) (See いけ好かない) prefix used to strengthen a derogatory adjective/EntL2441540/
+バタバタ(P);ばたばた(P) /(n,vs,adv,adv-to) (1) (on-mim) flapping/rattling (sound)/noisily/clattering noise/(n) (2) commotion/kerfuffle/(P)/EntL1098660X/
+ババ抜き;ばば抜き;婆抜き [ババぬき(ババ抜き);ばばぬき(ばば抜き,婆抜き)] /(n) (1) old maid (card game)/(2) (sl) living without one's mother-in-law/EntL1471510X/
+ブチ切れ(P);ぶち切れ [ブチきれ(ブチ切れ)(P);ブチぎれ(ブチ切れ);ぶちきれ(ぶち切れ);ぶちぎれ(ぶち切れ);ブチキレ;ブチギレ] /(adj-f) livid/(P)/EntL2101560/
+庵(P);菴;廬 [いおり(P);あん(庵,菴);いお] /(n,n-suf) hermitage/retreat/(P)/EntL1154280X/
+一財産;ひと財産 [いっざいさん(一財産);ひとざいさん] /(n) a fortune/EntL2066130X/
