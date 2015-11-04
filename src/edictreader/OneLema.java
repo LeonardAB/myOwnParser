@@ -124,6 +124,7 @@ public class OneLema {
         List<String> readingList = Arrays.asList(fullReading.split(";"));
         for (String readingListX: readingList) {
             //TODO validate this method!
+            //TODO print the notes sekalian
             if (readingListX.contains("(")) {
                 String readingTemp = readingListX.substring(0, readingListX.indexOf("("));
                 List<String> subReadingAssign = Arrays.asList(readingListX.split(","));
