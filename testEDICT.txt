@@ -50,3 +50,5 @@
 ブチ切れ(P);ぶち切れ [ブチきれ(ブチ切れ)(P);ブチぎれ(ブチ切れ);ぶちきれ(ぶち切れ);ぶちぎれ(ぶち切れ);ブチキレ;ブチギレ] /(adj-f) livid/(P)/EntL2101560/
 庵(P);菴;廬 [いおり(P);あん(庵,菴);いお] /(n,n-suf) hermitage/retreat/(P)/EntL1154280X/
 一財産;ひと財産 [いっざいさん(一財産);ひとざいさん] /(n) a fortune/EntL2066130X/
+いけ;いっけ /(pref) (See いけ好かない) prefix used to strengthen a derogatory adjective/EntL2441540/
+煙草(P);莨;烟草 [たばこ(gikun)(P);えんそう(煙草,烟草);けぶりぐさ(煙草,烟草);けむりぐさ(煙草,烟草);タバコ(P)] /(n) (1) (uk) tobacco (por: tabaco)/cigarette/cigaret/cigar/(2) (uk) tobacco plant (Nicotiana tabacum)/(P)/EntL1597150X/
