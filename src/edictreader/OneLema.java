@@ -54,14 +54,16 @@ public class OneLema {
         this.kanjiEnt = fullOri.substring(0, Math.min(fullOri.length(), this.kanjiLimPos)); //http://stackoverflow.com/questions/1583940/up-to-first-n-characters
 //        System.out.println("kanjiEnt = " + this.kanjiEnt);
 
-        this.hasKanji = kanjiEnt.contains("[");
-        if (hasKanji) {
-            this.fullReading = kanjiEnt.substring(kanjiEnt.indexOf("[") + 1, kanjiEnt.indexOf("]"));
-            System.out.println("fullReading = " + fullReading);
-            processKanji(fullKanji, fullReading);
-        } else {
-            processKanji(fullReading);
-        }
+        //process the kanji entry
+//        this.hasKanji = kanjiEnt.contains("[");
+//        if (hasKanji) {
+//            this.fullReading = kanjiEnt.substring(kanjiEnt.indexOf("[") + 1, kanjiEnt.indexOf("]"));
+//            System.out.println("fullReading = " + fullReading);
+//            processKanji(fullKanji, fullReading);
+//        } else {
+//            processKanji(fullReading);
+//        }
+        //detect commonness and lemaEndPos
         if (fullOri.contains("(P)")) {
             this.lemaEndPos = fullOri.lastIndexOf("/(P)");
             this.commonEnt = true;
@@ -69,7 +71,7 @@ public class OneLema {
             this.lemaEndPos = fullOri.lastIndexOf("/Ent");
             this.commonEnt = false;
         }
-        //System.out.println("lemaEndPos = " + lemaEndPos);
+        System.out.println("lemaEndPos = " + lemaEndPos);
         this.lemaEnt = fullOri.substring(kanjiLimPos + 1, lemaEndPos);  //http://stackoverflow.com/questions/4570037/java-substring-index-range
         this.entCode = fullOri.substring(fullOri.lastIndexOf("Ent"), fullOri.length() - 1);
 
@@ -124,7 +126,6 @@ public class OneLema {
         List<String> readingList = Arrays.asList(fullReading.split(";"));
         for (String readingListX: readingList) {
             //TODO validate this method!
-            //TODO print the notes sekalian
             if (readingListX.contains("(")) {
                 String readingTemp = readingListX.substring(0, readingListX.indexOf("("));
                 List<String> subReadingAssign = Arrays.asList(readingListX.split(","));
@@ -156,18 +157,27 @@ public class OneLema {
 
         String kanji, reading;
         List<String> kanjiNotes = new ArrayList<>();
+        List<String> readingNotes = new ArrayList<>();
 
         public SubKanji(String kanji, String reading) {
-            this.kanji = kanji;
-            this.reading = reading;
-            
+            this.kanjiNotes = Arrays.asList(OneLema.findNotes(kanji,false));
+            for (String kanjiNote: this.kanjiNotes) {
+                this.kanji = kanji.replace("(" + kanjiNote + ")", "");
+            }
+            this.readingNotes = Arrays.asList(OneLema.findNotes(reading, false));
+            for (String readingNote: readingNotes) {
+                this.reading = reading.replace("(" + readingNote + ")", "");
+            }
         }
 
         public SubKanji(String hiraOnly) {
-            this.kanji = hiraOnly;
+            this.kanjiNotes = Arrays.asList(OneLema.findNotes(hiraOnly,false));
+            for (String kanjiNote: this.kanjiNotes) {
+                this.kanji = hiraOnly.replace("(" + kanjiNote + ")", "");
+            }
             this.reading = null;
-            
-        }
+            this.readingNotes =null;
+         }
     }
 
     private class SubGloss {
@@ -183,7 +193,7 @@ public class OneLema {
         public SubGloss(String fullGloss) {
             this.fullGloss = fullGloss;
             this.pureMeaning = fullGloss;
-            String[] notes = findNotes(fullGloss);
+            String[] notes = findNotes(fullGloss,true);
 
             for (String note: notes) {
 
@@ -256,7 +266,7 @@ public class OneLema {
 
     }
 
-    private String[] findNotes(String str) {
+    private static String[] findNotes(String str, boolean includeCurl) {
         //  int openBrk = 1;
         //  int closeBrk = 2;
 
@@ -274,12 +284,13 @@ public class OneLema {
                 notes.add(str.substring(openBrk + 1, closeBrk));
             }
         }
-
+        if (includeCurl) {
         //find curly brackets but do not remove the brackets.
         int openBrk = str.indexOf("{");
         int closeBrk = str.indexOf("}");
         if (openBrk != -1 && closeBrk != -1) {
             notes.add(str.substring(openBrk, closeBrk + 1));
+        }
         }
 
         //convert list to array   
