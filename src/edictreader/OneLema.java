@@ -55,14 +55,20 @@ public class OneLema {
 //        System.out.println("kanjiEnt = " + this.kanjiEnt);
 
         //process the kanji entry
-//        this.hasKanji = kanjiEnt.contains("[");
-//        if (hasKanji) {
-//            this.fullReading = kanjiEnt.substring(kanjiEnt.indexOf("[") + 1, kanjiEnt.indexOf("]"));
-//            System.out.println("fullReading = " + fullReading);
-//            processKanji(fullKanji, fullReading);
-//        } else {
-//            processKanji(fullReading);
-//        }
+        this.hasKanji = kanjiEnt.contains("[");
+        if (hasKanji) {
+            this.fullReading = kanjiEnt.substring(kanjiEnt.indexOf("[") + 1, kanjiEnt.indexOf("]"));
+            this.fullKanji = kanjiEnt.substring(0,kanjiEnt.indexOf("["));
+           
+            processKanji(fullKanji, fullReading);
+        } else {
+            processKanji(fullReading);
+        }
+        
+        for (SubKanji subKanjiX: subKanji) {
+            System.out.println("subKanjiX = " + subKanjiX.kanji + "["+subKanjiX.reading+"]");
+        }
+        
         //detect commonness and lemaEndPos
         if (fullOri.contains("(P)")) {
             this.lemaEndPos = fullOri.lastIndexOf("/(P)");
@@ -122,33 +128,58 @@ public class OneLema {
     }
 
     private void processKanji(String fullKanji, String fullReading) { //isinya splitter utk entry yang multi kanji/reading
+        System.out.println("fullReading = " + fullReading);
+        System.out.println("fullKanji = " + fullKanji);
+        System.out.println("melewati method calling");
         List<String> kanjiList = Arrays.asList(fullKanji.split(";"));  //http://stackoverflow.com/questions/10631715/how-to-split-a-comma-separated-string
         List<String> readingList = Arrays.asList(fullReading.split(";"));
+        System.out.println("melewati deklarasi");
         for (String readingListX: readingList) {
             //TODO validate this method!
-            if (readingListX.contains("(")) {
+            if (readingListX.contains("(") 
+                && OneLema.checkJap("japanese",
+                                    readingListX.substring(readingListX.indexOf("(")+1,readingListX.indexOf(")")) ,
+                                    false)) {
                 String readingTemp = readingListX.substring(0, readingListX.indexOf("("));
                 List<String> subReadingAssign = Arrays.asList(readingListX.split(","));
                 for (String subReadingAssignX: subReadingAssign) {
                     subKanji.add(new SubKanji(subReadingAssignX,readingTemp));
                 }
             } else {
-                if (OneLema.checkJap("katakana", readingListX, true)) {
+                if (OneLema.checkJap("katakana", readingListX, false) && !OneLema.checkJap("kanji", readingListX, false)) {
                     subKanji.add(new SubKanji(readingListX)); 
+                    System.out.println("katakana detected");
                 } else {
                     for (String kanjiListX: kanjiList) {
+//                        System.out.println("normal reading detected");
+//                        System.out.println("readingListX = " + readingListX);
+//                        System.out.println("kanjiListX = " + kanjiListX);
                         subKanji.add(new SubKanji (kanjiListX, readingListX));
                     }
                 }
             }
         }
+        System.out.println("melewati contentcheck");
         List <String> tempReadKanji = new ArrayList<>();
+        List <String> tempKanjiList = new ArrayList<>();
         for (SubKanji kanjiX : this.subKanji) {
             tempReadKanji.add(kanjiX.kanji);
+            System.out.println("lwat check kanji = " + kanjiX.kanji);
         }
-        boolean kanjiAllReadingOK = tempReadKanji.containsAll(kanjiList);
+   
+        for (String tempReadKanjiX: tempReadKanji) {
+            System.out.println("tempReadKanjiX = " + tempReadKanjiX);
+        }
+        
+        for (String kanjiListX: kanjiList) {
+            tempKanjiList.add(CONTAINS_JAPANESE.negate().collapseFrom(kanjiListX, '\u0000')); //http://stackoverflow.com/questions/8534178/how-to-represent-empty-char-in-java-character-class
+            System.out.println("kanjiListX = " + CONTAINS_JAPANESE.negate().collapseFrom(kanjiListX, '\u0000'));
+        }
+ 
+        boolean kanjiAllReadingOK = tempKanjiList.containsAll(tempReadKanji); //?????????????????????????
+        System.out.println("ini gapapapapapapapa====================");
         if (!kanjiAllReadingOK) {
-            System.err.println("Kanji has no reading!");
+            System.err.println("Kanji has no reading!----------------------------------");
             System.exit(0);
         }
     }
@@ -161,13 +192,27 @@ public class OneLema {
 
         public SubKanji(String kanji, String reading) {
             this.kanjiNotes = Arrays.asList(OneLema.findNotes(kanji,false));
+                if (!kanjiNotes.isEmpty()) {
             for (String kanjiNote: this.kanjiNotes) {
-                this.kanji = kanji.replace("(" + kanjiNote + ")", "");
-            }
+                
+                      this.kanji = kanji.replace("(" + kanjiNote + ")", "");
+                     
+                } }
+                else {
+                    this.kanji =kanji;
+                   
+                }
+             
+            
             this.readingNotes = Arrays.asList(OneLema.findNotes(reading, false));
+                if (!readingNotes.isEmpty()) {
             for (String readingNote: readingNotes) {
-                this.reading = reading.replace("(" + readingNote + ")", "");
+                     this.reading = reading.replace("(" + readingNote + ")", "");
+                }
             }
+                else {
+                    this.reading = reading;
+                }
         }
 
         public SubKanji(String hiraOnly) {
