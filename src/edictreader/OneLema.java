@@ -66,8 +66,19 @@ public class OneLema {
         }
         
         for (SubKanji subKanjiX: subKanji) {
-            System.out.println("subKanjiX = " + subKanjiX.kanji + "["+subKanjiX.reading+"]");
+            System.out.print("subKanjiX = " + subKanjiX.kanji );
+            for (String kanjiNote: subKanjiX.kanjiNotes) {
+                System.out.print("("+kanjiNote+")");
+            }
+            System.out.print("["+subKanjiX.reading+"]");
+            for (String readingNote: subKanjiX.readingNotes) {
+                System.out.print("("+readingNote+")");
+            }
+            System.out.println("");
         }
+        //TODO: 1. subkanji ketiga entah kenapa masih punya trailing space. kayanya trim tadi hanya untuk pengecekan bukan pas penyimpanan. baik klo pas penyimpanan lgs ditrim
+        //2. subkanji yang katakana (keempat) ada null exception
+        
         
         //detect commonness and lemaEndPos
         if (fullOri.contains("(P)")) {
@@ -130,10 +141,10 @@ public class OneLema {
     private void processKanji(String fullKanji, String fullReading) { //isinya splitter utk entry yang multi kanji/reading
         System.out.println("fullReading = " + fullReading);
         System.out.println("fullKanji = " + fullKanji);
-        System.out.println("melewati method calling");
+//        System.out.println("melewati method calling");
         List<String> kanjiList = Arrays.asList(fullKanji.split(";"));  //http://stackoverflow.com/questions/10631715/how-to-split-a-comma-separated-string
         List<String> readingList = Arrays.asList(fullReading.split(";"));
-        System.out.println("melewati deklarasi");
+//        System.out.println("melewati deklarasi");
         for (String readingListX: readingList) {
             //TODO validate this method!
             if (readingListX.contains("(") 
@@ -148,7 +159,7 @@ public class OneLema {
             } else {
                 if (OneLema.checkJap("katakana", readingListX, false) && !OneLema.checkJap("kanji", readingListX, false)) {
                     subKanji.add(new SubKanji(readingListX)); 
-                    System.out.println("katakana detected");
+//                    System.out.println("katakana detected");
                 } else {
                     for (String kanjiListX: kanjiList) {
 //                        System.out.println("normal reading detected");
@@ -159,25 +170,29 @@ public class OneLema {
                 }
             }
         }
-        System.out.println("melewati contentcheck");
+//        System.out.println("melewati contentcheck");
         List <String> tempReadKanji = new ArrayList<>();
         List <String> tempKanjiList = new ArrayList<>();
         for (SubKanji kanjiX : this.subKanji) {
-            tempReadKanji.add(kanjiX.kanji);
-            System.out.println("lwat check kanji = " + kanjiX.kanji);
+            tempReadKanji.add(kanjiX.kanji.trim()); //http://stackoverflow.com/questions/6652687/strip-leading-and-trailing-spaces-from-java-string
+//            System.out.println("lwat check kanji = " + kanjiX.kanji);
         }
    
         for (String tempReadKanjiX: tempReadKanji) {
-            System.out.println("tempReadKanjiX = " + tempReadKanjiX);
+//            System.out.println("tempReadKanjiX = " + tempReadKanjiX);
         }
         
         for (String kanjiListX: kanjiList) {
-            tempKanjiList.add(CONTAINS_JAPANESE.negate().collapseFrom(kanjiListX, '\u0000')); //http://stackoverflow.com/questions/8534178/how-to-represent-empty-char-in-java-character-class
-            System.out.println("kanjiListX = " + CONTAINS_JAPANESE.negate().collapseFrom(kanjiListX, '\u0000'));
+            tempKanjiList.add(CONTAINS_JAPANESE.negate().collapseFrom(kanjiListX, '\u0000').trim()); //http://stackoverflow.com/questions/8534178/how-to-represent-empty-char-in-java-character-class
+            
+        }
+        
+        for (String tempKanjiListX: tempKanjiList) {
+//            System.out.println("tempKanjiListX = " + tempKanjiListX);    
         }
  
-        boolean kanjiAllReadingOK = tempKanjiList.containsAll(tempReadKanji); //?????????????????????????
-        System.out.println("ini gapapapapapapapa====================");
+        boolean kanjiAllReadingOK = tempReadKanji.containsAll(tempKanjiList); //?????????????????????????
+//        System.out.println(kanjiAllReadingOK);
         if (!kanjiAllReadingOK) {
             System.err.println("Kanji has no reading!----------------------------------");
             System.exit(0);
