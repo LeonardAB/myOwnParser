@@ -62,6 +62,7 @@ public class OneLema {
            
             processKanji(fullKanji, fullReading);
         } else {
+            this.fullReading = kanjiEnt;
             processKanji(fullReading);
         }
         
@@ -71,15 +72,14 @@ public class OneLema {
                 System.out.print("("+kanjiNote+")");
             }
             System.out.print("["+subKanjiX.reading+"]");
+            
             for (String readingNote: subKanjiX.readingNotes) {
                 System.out.print("("+readingNote+")");
             }
+            
             System.out.println("");
         }
-        //TODO: 1. subkanji ketiga entah kenapa masih punya trailing space. kayanya trim tadi hanya untuk pengecekan bukan pas penyimpanan. baik klo pas penyimpanan lgs ditrim
-        //2. subkanji yang katakana (keempat) ada null exception
-        
-        
+       
         //detect commonness and lemaEndPos
         if (fullOri.contains("(P)")) {
             this.lemaEndPos = fullOri.lastIndexOf("/(P)");
@@ -88,7 +88,7 @@ public class OneLema {
             this.lemaEndPos = fullOri.lastIndexOf("/Ent");
             this.commonEnt = false;
         }
-        System.out.println("lemaEndPos = " + lemaEndPos);
+       // System.out.println("lemaEndPos = " + lemaEndPos);
         this.lemaEnt = fullOri.substring(kanjiLimPos + 1, lemaEndPos);  //http://stackoverflow.com/questions/4570037/java-substring-index-range
         this.entCode = fullOri.substring(fullOri.lastIndexOf("Ent"), fullOri.length() - 1);
 
@@ -125,13 +125,14 @@ public class OneLema {
             //strip the number tag
             String unstripped = new String(fullOri.substring(this.lemasFullStartPos[i - 1] + 1, this.lemasFullEndPos[i - 1]));
             this.subGloss[i - 1] = new SubGloss(unstripped.replace("(" + iText + ")", "")); //http://stackoverflow.com/questions/10456681/how-to-initialize-array-in-java-when-the-class-constructor-has-parameters
-            System.out.println("Stripped ke  " + i + "= " + this.subGloss[i - 1].fullGloss);
-            System.out.println("\n");
+            System.out.println("Stripped ke  " + i + "= " + this.subGloss[i - 1].pureMeaning);
+            System.out.println("");
         }
-
+        System.out.println("------------------------------------------------------------------------------------------");
     }
 
     private void processKanji(String fullHiraOnly) { //isinya splitter utk entry yang multi kanji/reading
+        System.out.println("fullHiraOnly = " + fullHiraOnly);
         List<String> hiraList = Arrays.asList(fullHiraOnly.split(";"));  //http://stackoverflow.com/questions/10631715/how-to-split-a-comma-separated-string
         for (String hiraListX: hiraList) {
             subKanji.add(new SubKanji(hiraListX));
@@ -152,12 +153,16 @@ public class OneLema {
                                     readingListX.substring(readingListX.indexOf("(")+1,readingListX.indexOf(")")) ,
                                     false)) {
                 String readingTemp = readingListX.substring(0, readingListX.indexOf("("));
-                List<String> subReadingAssign = Arrays.asList(readingListX.split(","));
+                System.out.println("readingTemp = " + readingTemp);
+                List<String> subReadingAssign = Arrays.asList(readingListX.substring(readingListX.indexOf("(")+1,readingListX.indexOf(")")).split(","));
                 for (String subReadingAssignX: subReadingAssign) {
                     subKanji.add(new SubKanji(subReadingAssignX,readingTemp));
                 }
             } else {
-                if (OneLema.checkJap("katakana", readingListX, false) && !OneLema.checkJap("kanji", readingListX, false)) {
+                if (OneLema.checkJap("katakana", readingListX, false) 
+                    && !OneLema.checkJap("kanji", readingListX, false) 
+                    && !OneLema.checkJap("punct", readingListX, false) 
+                    && !OneLema.checkJap("hiragana", readingListX,false)    ) {
                     subKanji.add(new SubKanji(readingListX)); 
 //                    System.out.println("katakana detected");
                 } else {
@@ -177,7 +182,7 @@ public class OneLema {
             tempReadKanji.add(kanjiX.kanji.trim()); //http://stackoverflow.com/questions/6652687/strip-leading-and-trailing-spaces-from-java-string
 //            System.out.println("lwat check kanji = " + kanjiX.kanji);
         }
-   
+//        System.out.println("tempReadKanji size = " + tempReadKanji.size());
         for (String tempReadKanjiX: tempReadKanji) {
 //            System.out.println("tempReadKanjiX = " + tempReadKanjiX);
         }
@@ -190,11 +195,11 @@ public class OneLema {
         for (String tempKanjiListX: tempKanjiList) {
 //            System.out.println("tempKanjiListX = " + tempKanjiListX);    
         }
- 
+//        System.out.println("kanji compare done");
         boolean kanjiAllReadingOK = tempReadKanji.containsAll(tempKanjiList); //?????????????????????????
 //        System.out.println(kanjiAllReadingOK);
         if (!kanjiAllReadingOK) {
-            System.err.println("Kanji has no reading!----------------------------------");
+            System.out.println("Kanji has no reading!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!");
             System.exit(0);
         }
     }
@@ -207,36 +212,36 @@ public class OneLema {
 
         public SubKanji(String kanji, String reading) {
             this.kanjiNotes = Arrays.asList(OneLema.findNotes(kanji,false));
+            this.kanji=kanji.trim();
                 if (!kanjiNotes.isEmpty()) {
             for (String kanjiNote: this.kanjiNotes) {
-                
-                      this.kanji = kanji.replace("(" + kanjiNote + ")", "");
+                      this.kanji = this.kanji.replace("(" + kanjiNote + ")", "").trim();
+//                System.out.println("kanji sebelum replace = "+kanji+" ------ kanjiNote = " + kanjiNote+" sesudahnya menjadi ====== "+this.kanji);
                      
                 } }
-                else {
-                    this.kanji =kanji;
-                   
-                }
+             
              
             
             this.readingNotes = Arrays.asList(OneLema.findNotes(reading, false));
+             this.reading = reading.trim();
                 if (!readingNotes.isEmpty()) {
             for (String readingNote: readingNotes) {
-                     this.reading = reading.replace("(" + readingNote + ")", "");
+                     this.reading = this.reading.replace("(" + readingNote + ")", "").trim();
                 }
             }
-                else {
-                    this.reading = reading;
-                }
+               
         }
 
         public SubKanji(String hiraOnly) {
+            this.kanji=hiraOnly.trim();
             this.kanjiNotes = Arrays.asList(OneLema.findNotes(hiraOnly,false));
+             if (!kanjiNotes.isEmpty()) {
             for (String kanjiNote: this.kanjiNotes) {
-                this.kanji = hiraOnly.replace("(" + kanjiNote + ")", "");
-            }
-            this.reading = null;
-            this.readingNotes =null;
+                this.kanji = this.kanji.replace("(" + kanjiNote + ")", "").trim();
+            } }
+           
+         //   this.reading = null;
+         //   this.readingNotes =null;
          }
     }
 

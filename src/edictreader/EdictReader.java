@@ -52,14 +52,17 @@ public class EdictReader {
                         str = in.readLine();
                         System.out.println(str);
                         
-                        OneLema satuLema = new OneLema(str);
+                        //OneLema satuLema = new OneLema(str);
                        
                         
                         
                         break;
                     case "3":
                         while ((str = in.readLine()) != null) {
-                            System.out.println("\n" + str);
+                       // str = in.readLine();
+                        System.out.println(str);
+                        OneLema satuLema = new OneLema(str);
+                            //System.out.println("\n" + str);
 
                             // TODO
                             // 1. cek apakah tidak ada lema yang memiliki lebih dari 20 arti
