@@ -58,6 +58,7 @@ public class EdictReader {
                         
                         break;
                     case "3":
+                        String result = "";
                         while ((str = in.readLine()) != null) {
                        // str = in.readLine();
                         System.out.println(str);
@@ -68,8 +69,26 @@ public class EdictReader {
                             // 1. cek apakah tidak ada lema yang memiliki lebih dari 20 arti
                             // 2. cek apakah tidak ada entry kanji (combined with the reading) lebih dari 7
                            // OneLema satuLema = new OneLema(str);
-
+                        
+                        
+                        String id = satuLema.entCode;
+                            String kanji = satuLema.fullKanji;
+                            String reading = satuLema.fullReading;
+                            String meaning = satuLema.lemaEnt.replace("'", "''");
+                            boolean common = satuLema.commonEnt;
+                            result = result + "\r\n('" + id
+                                 + "', '" + kanji.trim()
+                                 + "', '" + reading
+                                 + "', '" + meaning
+                                 + "', '" + (common ? 1 : 0)
+                                 + "'),";
+                            
                         }
+                            result = result.substring(0, result.length()-1) + ";";
+		CreateSQL_edict csql = new CreateSQL_edict();
+		csql.setContent(csql.getHeader() + result);
+		csql.stringToFile("edict_test.sql"); //the output is not EUC-JP, it is windows 1252. Use EditPadLite to open it in EUC-JP, the re-encode with UTF8
+
                         break;
                     default:
                         System.out.println("Sorry your choice is outside our options");

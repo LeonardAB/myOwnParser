@@ -63,6 +63,7 @@ public class OneLema {
             processKanji(fullKanji, fullReading);
         } else {
             this.fullReading = kanjiEnt;
+             this.fullKanji ="";
             processKanji(fullReading);
         }
         
