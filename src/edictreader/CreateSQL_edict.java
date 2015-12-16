@@ -21,7 +21,7 @@ public class CreateSQL_edict {
 			"--\r\n" + 
 			"\r\n" + 
 			"CREATE TABLE IF NOT EXISTS `edict` (\r\n" + 
-			"	`id` varchar(255) NOT NULL,\r\n" + 
+			"	`_id` varchar(255) PRIMARY KEY NOT NULL,\r\n" +  
 			"	`kanji` varchar(255) NOT NULL,\r\n" + 
 			"	`reading` varchar(255) NOT NULL,\r\n" + 
 			"	`meaning` TEXT NOT NULL,\r\n" + 
@@ -32,7 +32,7 @@ public class CreateSQL_edict {
 			"-- Data for table `edict`\r\n" + 
 			"--\r\n" + 
 			"\r\n" + 
-			"INSERT INTO `edict` (`id`, `kanji`, `reading`, `meaning`, `common`) VALUES";
+			"INSERT INTO `edict` (`_id`, `kanji`, `reading`, `meaning`, `common`) VALUES";
 	private static String content;
 
 	public String getHeader(){
